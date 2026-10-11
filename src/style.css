@@ -1,0 +1,248 @@
+:root {
+  --casing: #274a73;
+  --casing-deep: #1a3354;
+  --casing-light: #3a638f;
+  --lcd: #b7c68b;
+  --lcd-grid: #aebd82;
+  --ink: #232c1a;
+  --text-on-casing: #dfe9f5;
+  --font: 'Silkscreen', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --cols: 20;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+  background: var(--casing-deep);
+  color: var(--text-on-casing);
+  font-family: var(--font);
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  font-family: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid #ffd84d;
+  outline-offset: 2px;
+}
+
+/* ---------- Device ---------- */
+.device {
+  width: min(100%, 520px);
+  padding: 20px 20px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 16px;
+  background: var(--casing);
+  border-radius: 28px;
+  box-shadow:
+    inset 0 2px 0 var(--casing-light),
+    inset 0 -6px 0 rgba(0, 0, 0, 0.25),
+    0 24px 48px rgba(0, 0, 0, 0.35);
+}
+
+.title {
+  margin: 0;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+/* ---------- LCD screen ---------- */
+.screen {
+  padding: 12px;
+  background: var(--lcd);
+  color: var(--ink);
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 3px rgba(0, 0, 0, 0.35);
+}
+
+.scoreboard {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.board {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--cols), 1fr);
+  grid-template-rows: repeat(var(--cols), 1fr);
+  width: min(100%, 62dvh);
+  margin-inline: auto;
+  aspect-ratio: 1;
+  border: 3px solid var(--ink);
+  background-color: var(--lcd);
+  background-image:
+    linear-gradient(var(--lcd-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--lcd-grid) 1px, transparent 1px);
+  background-size: calc(100% / var(--cols)) calc(100% / var(--cols));
+  touch-action: none;
+  user-select: none;
+}
+
+.segment {
+  margin: 1px;
+  background: var(--ink);
+  box-shadow: inset 0 0 0 2px var(--lcd);
+}
+
+.segment.head {
+  box-shadow: none;
+}
+
+.food {
+  margin: 1px;
+  background: var(--ink);
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  animation: blink 0.9s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+/* ---------- Overlay ---------- */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px;
+  text-align: center;
+  background: rgba(183, 198, 139, 0.92);
+}
+
+.overlay h2 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.overlay p {
+  margin: 0;
+  max-width: 26ch;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.btn {
+  margin-top: 6px;
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 4px;
+  background: var(--ink);
+  color: var(--lcd);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #36422a;
+}
+
+/* ---------- Difficulty ---------- */
+.difficulty {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.chip {
+  padding: 8px 14px;
+  border: 2px solid var(--casing-light);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-on-casing);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.chip[aria-pressed='true'] {
+  background: var(--text-on-casing);
+  border-color: var(--text-on-casing);
+  color: var(--casing-deep);
+  font-weight: 700;
+}
+
+.chip:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ---------- Touch d-pad (touch devices only) ---------- */
+.dpad {
+  display: none;
+  grid-template-columns: repeat(3, 64px);
+  grid-template-rows: repeat(3, 64px);
+  gap: 6px;
+  justify-content: center;
+}
+
+.dpad button {
+  border: 0;
+  border-radius: 14px;
+  background: var(--casing-deep);
+  color: var(--text-on-casing);
+  font-size: 1.2rem;
+  touch-action: manipulation;
+}
+
+.dpad button:active {
+  background: var(--casing-light);
+}
+
+.dpad .up {
+  grid-area: 1 / 2;
+}
+.dpad .left {
+  grid-area: 2 / 1;
+}
+.dpad .right {
+  grid-area: 2 / 3;
+}
+.dpad .down {
+  grid-area: 3 / 2;
+}
+
+@media (pointer: coarse) {
+  .dpad {
+    display: grid;
+  }
+  .hint {
+    display: none;
+  }
+}
+
+.hint {
+  margin: 0;
+  text-align: center;
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .food {
+    animation: none;
+  }
+}
